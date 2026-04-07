@@ -12,11 +12,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.10 (x86)
+      - name: Set up Python 3.8 (x86)
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
-          architecture: "x86"
+          python-version: '3.8'
+          architecture: 'x86'
 
       - name: Install dependencies
         run: |
@@ -26,10 +26,10 @@ jobs:
 
       - name: Build EXE with PyInstaller
         run: |
-          pyinstaller --onefile --windowed --name LanCollab main.py
+          pyinstaller --onefile --windowed --collect-all --name LanCollabX86 main.py
 
       - name: Upload EXE artifact
         uses: actions/upload-artifact@v4
         with:
-          name: LanCollab-x86
-          path: dist/LanCollab.exe
+          name: LanCollabX86
+          path: dist/LanCollabX86.exe
