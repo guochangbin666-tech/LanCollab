@@ -1,0 +1,9 @@
+PySide2==5.15.2.1
+pywin32
+mss
+pygetwindow
+pyautogui
+opencv-python
+numpy
+pystray
+Pillow
