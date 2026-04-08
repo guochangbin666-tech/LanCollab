@@ -21,3 +21,24 @@ def get_event_pos(event):
         return event.position().toPoint()
     else:
         return event.pos()
+
+# Helper for application execution
+def exec_app(app):
+    if PYSIDE6:
+        return app.exec()
+    else:
+        return app.exec_()
+
+# Helper for dialog execution
+def exec_dialog(dialog):
+    if PYSIDE6:
+        return dialog.exec()
+    else:
+        return dialog.exec_()
+
+# Helper for global position
+def get_global_pos(event):
+    if PYSIDE6:
+        return event.globalPosition().toPoint()
+    else:
+        return event.globalPos()
