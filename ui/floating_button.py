@@ -2,7 +2,8 @@ import sys
 import os
 import time
 from utils.qt_compat import (QApplication, QWidget, QPushButton, QVBoxLayout, 
-                              QListWidget, QListWidgetItem, QDialog, Qt, QTimer, QPoint, Signal)
+                              QListWidget, QListWidgetItem, QDialog, Qt, QTimer, QPoint, Signal,
+                              get_global_pos, exec_dialog)
 import pygetwindow as gw
 import win32gui
 import win32process
@@ -58,19 +59,19 @@ class FloatingButton(QWidget):
     def _on_click(self):
         # Show online users to share with
         dialog = ShareDialog(self.main_window.discovery.peers, self)
-        if dialog.exec() == QDialog.Accepted:
+        if exec_dialog(dialog) == QDialog.Accepted:
             target_ip = dialog.selected_ip
             if self.current_window:
                 self.request_sharing.emit(self.current_window.title, target_ip)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
-            self.drag_pos = event.globalPosition().toPoint() - self.frameGeometry().topLeft()
+            self.drag_pos = get_global_pos(event) - self.frameGeometry().topLeft()
             event.accept()
 
     def mouseMoveEvent(self, event):
         if event.buttons() & Qt.LeftButton and self.drag_pos:
-            self.move(event.globalPosition().toPoint() - self.drag_pos)
+            self.move(get_global_pos(event) - self.drag_pos)
             event.accept()
 
 class ShareDialog(QDialog):
