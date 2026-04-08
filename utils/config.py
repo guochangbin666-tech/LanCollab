@@ -3,7 +3,7 @@ import os
 
 class Config:
     DEFAULT_CONFIG = {
-        "username": os.getlogin(),
+        "username": os.environ.get('USERNAME', 'User'),
         "room_code": "1234",
         "autostart": True
     }
