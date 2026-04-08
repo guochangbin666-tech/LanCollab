@@ -2,7 +2,7 @@ import sys
 import os
 from utils.qt_compat import (QApplication, QMainWindow, QVBoxLayout, QWidget, 
                              QLabel, QListWidget, QListWidgetItem, QPushButton, 
-                             QHBoxLayout, QIcon, QAction, Qt, Signal)
+                             QHBoxLayout, QIcon, QAction, Qt, Signal, exec_dialog)
 import pystray
 from PIL import Image, ImageDraw
 import threading
@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
 
     def _open_settings(self):
         dialog = SettingsDialog(self.config, self)
-        if dialog.exec() == SettingsDialog.Accepted:
+        if exec_dialog(dialog) == SettingsDialog.Accepted:
             new_config = dialog.new_config
             # Update autostart
             if new_config["autostart"] != self.config.get("autostart", True):
