@@ -3,7 +3,7 @@ import os
 import threading
 from utils.qt_compat import (QApplication, QMainWindow, QVBoxLayout, QWidget, 
                              QLabel, QListWidget, QListWidgetItem, QPushButton, QHBoxLayout,
-                             QIcon, QAction, Qt, Signal)
+                             QIcon, QAction, Qt, Signal, exec_app)
 import pystray
 from PIL import Image, ImageDraw
 
@@ -67,7 +67,7 @@ class LanCollabApp:
     def run(self):
         self.main_window.show()
         self.floating_btn.show()
-        sys.exit(self.q_app.exec())
+        sys.exit(exec_app(self.q_app))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
