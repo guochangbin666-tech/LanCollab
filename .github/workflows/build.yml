@@ -1,43 +1,33 @@
-import PyInstaller.__main__
-import os
-import sys
+name: Build EXE
 
-def build():
-    # Detect if we are in PySide6 or PySide2 environment
-    try:
-        import PySide6
-        qt_lib = 'PySide6'
-    except ImportError:
-        qt_lib = 'PySide2'
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
-    print(f"Building for {qt_lib} ({'32-bit' if sys.maxsize <= 2**31-1 else '64-bit'})...")
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
 
-    # PyInstaller options
-    options = [
-        'main.py',
-        '--name=LanCollab',
-        '--onefile',
-        '--windowed',
-        '--add-data=ui;ui',
-        '--add-data=network;network',
-        '--add-data=office;office',
-        '--add-data=utils;utils',
-        f'--hidden-import={qt_lib}.QtCore',
-        f'--hidden-import={qt_lib}.QtGui',
-        f'--hidden-import={qt_lib}.QtWidgets',
-        '--hidden-import=pystray',
-        '--hidden-import=PIL',
-        '--hidden-import=mss',
-        '--hidden-import=pygetwindow',
-        '--hidden-import=win32gui',
-        '--hidden-import=win32process',
-        '--hidden-import=pywin32',
-        '--hidden-import=pyautogui',
-        '--hidden-import=cv2',
-        '--hidden-import=numpy',
-    ]
-    
-    PyInstaller.__main__.run(options)
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
 
-if __name__ == "__main__":
-    build()
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements_x86.txt
+          pip install pyinstaller
+
+      - name: Build EXE
+        run: |
+          pyinstaller --onefile --windowed --name LanCollab main.py
+
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: LanCollab-EXE
+          path: dist/LanCollab.exe
